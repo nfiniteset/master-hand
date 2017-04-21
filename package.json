@@ -7,9 +7,11 @@
     "morgan": "^1.8.1",
     "react": "^15.5.4",
     "react-dom": "^15.5.4",
-    "socket.io": "^1.7.3"
+    "socket.io": "^1.7.3",
+    "socket.io-react": "^1.1.2"
   },
   "devDependencies": {
+    "prop-types": "^15.5.8",
     "react-scripts": "0.9.5"
   },
   "scripts": {
