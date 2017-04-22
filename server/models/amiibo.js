@@ -7,6 +7,6 @@ const DEFAULTS = {
 
 module.exports = {
   init(model = {}) {
-    this.state = Object.assign({}, DEFAULTS, model);
+    return this.state = Object.assign({}, DEFAULTS, model);
   }
 }
