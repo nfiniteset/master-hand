@@ -9,7 +9,7 @@ module.exports = function(socket) {
 
   socket.on('debug-blank-rfid-scanned', function(data) {
     console.log('recieved event: debug-blank-rfid-scanned');
-    blankRfidScanned(socket, '0471622AE33E81');
+    blankRfidScanned(socket, '0471622AE33E81', '0471629F2AE33E8176');
   });
 
   socket.on('debug-rfid-removed', function(data) {
@@ -18,8 +18,8 @@ module.exports = function(socket) {
   });
 }
 
-function blankRfidScanned(socket, shortUid) {
-  let data = Amiibo.init({ shortUid: shortUid });
+function blankRfidScanned(socket, shortUid, longUid) {
+  let data = Amiibo.init({ shortUid, longUid });
   console.log('emitting event: blank-rfid-scanned', data);
   socket.emit('blank-rfid-scanned', data);
 }
@@ -32,5 +32,9 @@ function rfidRemoved(socket) {
 function writeAmiibo(data) {
   let amiibo = Amiibo.getPassword(data.amiibo);
   amiibo.bin = AmiiboBin.read(data.series, data.bin);
-  console.log(amiibo);
+  console.log('Bin before');
+  console.log(AmiiboBin.format(amiibo.bin));
+  amiibo = Amiibo.patch(amiibo);
+  console.log('Bin after');
+  console.log(AmiiboBin.format(amiibo.bin));
 }
