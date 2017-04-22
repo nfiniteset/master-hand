@@ -7,7 +7,7 @@ import './style.css';
 class App extends Component {
   constructor(props) {
     super(props);
-    this.state = { amiibo: {} }
+    this.state = { amiibo: {}, bins: [], chosenBin: undefined }
 
     props.socket.on('blank-rfid-scanned', (amiibo) => {
       console.log('recieved blank-rfid-scanned', amiibo)
@@ -18,12 +18,26 @@ class App extends Component {
       console.log('recieved rfid-removed', amiibo)
       this.setState({ amiibo: amiibo });
     });
+
+    ['setChosenBin'].forEach((fn) => {
+      this[fn] = this[fn].bind(this);
+    });
+  }
+
+  componentDidMount() {
+    fetch('/bins')
+      .then((response) => { return response.json() })
+      .then((data) => { return this.setState({ bins: data }); });
+  }
+
+  setChosenBin(bin) {
+    this.setState({ chosenBin: bin });
   }
 
   render() {
     return (
-      <div className="App marching-ants">
-        <AmiiboScanner amiibo={this.state.amiibo}></AmiiboScanner>
+      <div className="App">
+        <AmiiboScanner amiibo={this.state.amiibo} bins={this.state.bins} chosenBin={this.state.chosenBin} binChosen={this.setChosenBin}></AmiiboScanner>
         <DebugTools socket={this.props.socket}></DebugTools>
       </div>
     );

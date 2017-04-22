@@ -1,0 +1,16 @@
+.BinChooser {
+
+}
+
+.BinChooser__series {
+  margin-top: 20px;
+  color: #aaa;
+}
+
+.BinChooser__bin {
+
+}
+
+.BinChooser__bin--is-chosen {
+  color: green;
+}
