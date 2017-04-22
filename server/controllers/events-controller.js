@@ -9,7 +9,7 @@ module.exports = function(socket) {
 
   socket.on('debug-blank-rfid-scanned', function(data) {
     console.log('recieved event: debug-blank-rfid-scanned');
-    blankRfidScanned(socket, '123456789ABCDE');
+    blankRfidScanned(socket, '0471622AE33E81');
   });
 
   socket.on('debug-rfid-removed', function(data) {
@@ -30,11 +30,7 @@ function rfidRemoved(socket) {
 }
 
 function writeAmiibo(data) {
-  const bin = AmiiboBin.read(data.series, data.bin);
-  const amiibo = Amiibo.patch({
-    bin: bin,
-    shortUid: data.shortUid,
-    longUid: data.longUid
-  });
-  console.log(bin);
+  let amiibo = Amiibo.getPassword(data.amiibo);
+  amiibo.bin = AmiiboBin.read(data.series, data.bin);
+  console.log(amiibo);
 }

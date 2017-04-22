@@ -5,11 +5,14 @@
   "dependencies": {
     "classnames": "^2.2.5",
     "express": "^4.15.2",
+    "install": "^0.8.8",
     "morgan": "^1.8.1",
+    "npm": "^4.5.0",
     "react": "^15.5.4",
     "react-dom": "^15.5.4",
     "socket.io": "^1.7.3",
-    "socket.io-react": "^1.1.2"
+    "socket.io-react": "^1.1.2",
+    "sync-exec": "^0.6.2"
   },
   "devDependencies": {
     "prop-types": "^15.5.8",
