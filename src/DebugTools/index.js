@@ -8,6 +8,7 @@ class App extends Component {
   }
 
   simulateScanFakeRfid() {
+    console.log('emitting event: debug-blank-uid-scanned');
     this.props.socket.emit('debug-blank-rfid-scanned');
   }
 

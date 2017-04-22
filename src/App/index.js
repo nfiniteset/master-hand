@@ -7,7 +7,6 @@ class App extends Component {
   render() {
     return (
       <div className="App marching-ants">
-        <AmiiboScanner></AmiiboScanner>
         <DebugTools socket={this.props.socket}></DebugTools>
       </div>
     );
