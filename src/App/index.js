@@ -7,7 +7,7 @@ import './style.css';
 class App extends Component {
   constructor(props) {
     super(props);
-    this.state = { amiibo: {}, bins: [], chosenBin: undefined }
+    this.state = { amiibo: {}, bins: [], chosenSeries: undefined, chosenBin: undefined }
 
     props.socket.on('blank-rfid-scanned', (amiibo) => {
       console.log('recieved blank-rfid-scanned', amiibo)
@@ -16,10 +16,10 @@ class App extends Component {
 
     props.socket.on('rfid-removed', (amiibo) => {
       console.log('recieved rfid-removed', amiibo)
-      this.setState({ amiibo: amiibo });
+      this.setState({ amiibo: amiibo, chosenSeries: undefined, chosenBin: undefined });
     });
 
-    ['setChosenBin'].forEach((fn) => {
+    ['setChosenBin', 'writeAmiibo'].forEach((fn) => {
       this[fn] = this[fn].bind(this);
     });
   }
@@ -30,14 +30,22 @@ class App extends Component {
       .then((data) => { return this.setState({ bins: data }); });
   }
 
-  setChosenBin(bin) {
-    this.setState({ chosenBin: bin });
+  setChosenBin(chosenSeries, chosenBin) {
+    this.setState({ chosenSeries, chosenBin });
+  }
+
+  writeAmiibo() {
+    this.props.socket.emit('write-amiibo', {
+      amiibo: this.state.amiibo,
+      series: this.state.chosenSeries,
+      bin: this.state.chosenBin
+    });
   }
 
   render() {
     return (
       <div className="App">
-        <AmiiboScanner amiibo={this.state.amiibo} bins={this.state.bins} chosenBin={this.state.chosenBin} binChosen={this.setChosenBin}></AmiiboScanner>
+        <AmiiboScanner {...this.state} binChosen={this.setChosenBin} writeAmiibo={this.writeAmiibo}></AmiiboScanner>
         <DebugTools socket={this.props.socket}></DebugTools>
       </div>
     );

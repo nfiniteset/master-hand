@@ -8,7 +8,8 @@
 }
 
 .BinChooser__bin {
-
+  padding: 5px;
+  cursor: pointer;
 }
 
 .BinChooser__bin--is-chosen {

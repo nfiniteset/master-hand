@@ -7,8 +7,8 @@ function format(name) {
 }
 
 class BinChooser extends Component {
-  binClicked(bin) {
-    this.props.binChosen(bin);
+  binClicked(series, bin) {
+    this.props.binChosen(series, bin);
   }
 
   render() {
@@ -22,7 +22,7 @@ class BinChooser extends Component {
             });
 
             return (
-              <div className={classNames} key={bin} onClick={this.binClicked.bind(this, bin)}>{format(bin)}</div>
+              <div className={classNames} key={bin} onClick={this.binClicked.bind(this, series, bin)}>{format(bin)}</div>
             );
           })}
         </div>
