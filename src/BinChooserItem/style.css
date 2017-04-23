@@ -1,0 +1,30 @@
+.BinChooserItem__bin {
+  padding: 5px;
+  cursor: pointer;
+  height: 250px;
+  margin-bottom: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  transition: all 0.3s;
+}
+
+.BinChooserItem__bin--is-chosen {
+  color: green;
+  grid-column: 1 / span 2;
+  grid-row: 1 / span 2;
+  height: 530px;
+}
+
+.BinChooserItem__bin--Breath_of_the_Wild-Guardian {
+  grid-column-end: span 2;
+}
+
+.BinChooserItem__bin--Breath_of_the_Wild-Guardian.BinChooserItem__bin--is-chosen {
+  grid-column-end: span 3;
+}
+
+.BinChooserItem__inner {
+  position: absolute;
+}

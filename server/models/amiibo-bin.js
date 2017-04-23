@@ -1,9 +1,5 @@
 const fs = require('fs');
 
-const DEFAULTS = {
-  hex: undefined,
-}
-
 const PASSWORD_START = 0;
 const PASSWORD_LENGTH = 8;
 
@@ -23,28 +19,52 @@ function structure(data) {
   return chunk(chunk(data, 8), 7);
 }
 
+function replace(str, replacement, start) {
+	return [
+    str.substr(0, start),
+    replacement,
+    str.substr(start + replacement.length, str.length)
+  ].join('');;
+}
+
 module.exports = {
   read(seriesName, binName) {
     const path = `./bins/${seriesName}/${binName}.bin`;
-    const hex = fs.readFileSync(path, { encoding: 'hex' });
-    return Object.assign({}, DEFAULTS, { hex });
+    return fs.readFileSync(path, { encoding: 'hex' });
   },
 
-  writeStatic(model) {
-    return model;
+  writeLocks(model) {
+    return [
+      { location: 4, value: '0000' },
+      { location: 1040, value: '000000' },
+      { location: 1072, value: '8080' },
+    ].reduce((model, { location, value }) => {
+      return replace(model, value, location);
+    }, model);
   },
 
   writePassword(model, password) {
-    return model;
+    return replace(model, password, 1064);
   },
 
-  writeUid(model, shortUid, longUid) {
-    return model;
+  writeUid(model, longUid) {
+    return [
+      { location: 0, value: longUid.substr(longUid.length - 2, 2) },
+      { location: 936, value: longUid.substr(0, 16) },
+    ].reduce((model, { location, value }) => {
+      return replace(model, value, location);
+    }, model);
   },
 
   format(model) {
-    return structure(model.hex).reduce(function(memo, row) {
+    return structure(model).reduce(function(memo, row) {
       return memo += `${row.join(' ')}\n`;
+    }, '');
+  },
+
+  formatHex(model) {
+    return model.match(/.{1,2}/g).reduce(function(memo, byte) {
+      return memo += `0x${byte}, `
     }, '');
   }
 }

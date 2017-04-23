@@ -1,37 +1,76 @@
 import React, { Component } from 'react';
-import cn from 'classnames';
+import BinChooserItem from '../BinChooserItem';
+import BinChooserImg from '../BinChooserImg';
 import './style.css';
 
-function format(name) {
+function format(name = '') {
   return name.replace(/_/g, ' ');
 }
 
 class BinChooser extends Component {
-  binClicked(series, bin) {
-    this.props.binChosen(series, bin);
+  constructor(props) {
+    super(props);
+    this.state = { itemStyles: {} };
+    ['setItemStyle'].forEach((fn) => {
+      this[fn] = this[fn].bind(this);
+    });
+  }
+
+  setItemStyle(id, itemStyles) {
+    const updatedItemStyles = Object.assign({}, this.state.itemStyles);
+    updatedItemStyles[id] = itemStyles;
+    this.setState({ itemStyles: updatedItemStyles });
   }
 
   render() {
-    const bins = Object.entries(this.props.bins).map(([series, bins]) => {
+    if (!this.props.cardPresent) {
       return (
-        <div key={series}>
-          <div className="BinChooser__series">{format(series)}</div>
-          {bins.map((bin) => {
-            const classNames = cn('BinChooser__bin', {
-              'BinChooser__bin--is-chosen': this.props.chosenBin === bin
-            });
-
-            return (
-              <div className={classNames} key={bin} onClick={this.binClicked.bind(this, series, bin)}>{format(bin)}</div>
-            );
-          })}
-        </div>
+        <ul className="BinChooser"></ul>
       );
+    }
+
+    const binChosen = this.props.chosenBin;
+
+    const bins = Object.entries(this.props.bins).map(([series, bins]) => {
+      return bins.map((bin) => {
+          const props = {
+            id: `${series}-${bin}`,
+            bin: bin,
+            series: series,
+            chosenBin: this.props.chosenBin,
+            chosenSeries: this.props.chosenSeries,
+            setItemStyle: this.setItemStyle
+          }
+          return <BinChooserItem {...props} key={series + bin}></BinChooserItem>
+        });
+      });
+
+    const images = Object.entries(this.props.bins).map(([series, bins]) => {
+      return bins.map((bin) => {
+        const id = `${series}-${bin}`;
+        const props = {
+          bin: bin,
+          series: series,
+          imgStyles: this.state.itemStyles[id],
+          binChosen: this.props.binChosen,
+        }
+        return <BinChooserImg {...props} key={series + bin}></BinChooserImg>
+      });
     });
 
     return (
       <div className="BinChooser">
-        {bins}
+        <ul className="BinChooser__items">
+          { binChosen ? (
+            <li className={'BinChooser__info'}>
+              <h2>{format(this.props.chosenBin)}</h2>
+              <h3>{format(this.props.chosenSeries)}</h3>
+              <button className="AmiiboScanner__write-button" disabled={!binChosen} onClick={this.props.writeAmiibo}>Write</button>
+            </li>
+          ) : null }
+          { bins }
+        </ul>
+        <ul className="BinChooser__images">{images}</ul>
       </div>
     );
   }

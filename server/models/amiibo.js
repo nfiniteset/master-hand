@@ -14,16 +14,18 @@ module.exports = {
   },
 
   getPassword(model) {
-    const password = exec(`bash ./scripts/password.bash ${model.shortUid}`)
+    const password = exec(`bash ./scripts/password.bash ${model.longUid}`)
                         .stdout
                         .replace('\n', '');
+
     return Object.assign({}, model, { password });
   },
 
   patch(model) {
-    let bin = AmiiboBin.writeStatic(model.bin);
-    bin = AmiiboBin.writePassword(model.bin, model.password);
-    bin = AmiiboBin.writeUid(model.bin, model.shortUid, model.longUid);
+    let bin = model.bin;
+    bin = AmiiboBin.writeLocks(bin);
+    bin = AmiiboBin.writePassword(bin, model.password);
+    bin = AmiiboBin.writeUid(bin, model.longUid);
     return Object.assign({}, model, { bin });
   }
 }

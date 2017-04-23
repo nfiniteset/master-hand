@@ -1,0 +1,14 @@
+.BinChooserImage {
+  position: absolute;
+  display: block;
+  top: 1000px;
+  height: 0;
+  width: 0;
+  margin: 0;
+  object-fit: contain;
+  transition: all 0.5s;
+}
+
+.BinChooserImage:hover {
+  transform: scale(1.2);
+}

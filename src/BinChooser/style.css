@@ -1,17 +1,32 @@
 .BinChooser {
-
+  flex: 1 1 0;
 }
 
-.BinChooser__series {
-  margin-top: 20px;
-  color: #aaa;
+.BinChooser__items {
+  position: relative;
+  display: grid;
+  width: 100vw;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  overflow: scroll;
+  grid-template-columns: 1fr 1fr 1fr;
 }
 
-.BinChooser__bin {
-  padding: 5px;
-  cursor: pointer;
+.BinChooser__images {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
 }
 
-.BinChooser__bin--is-chosen {
-  color: green;
+@media (min-width: 1024px) {
+  .BinChooser__items {
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+  }
+}
+
+.BinChooser__info {
+  grid-row: span 2;
 }

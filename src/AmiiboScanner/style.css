@@ -1,0 +1,16 @@
+.AmiiboScanner {
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
+}
+
+
+.AmiiboScanner__write-button {
+  padding: 20px;
+  background: sunset;
+}
+
+.AmiiboScanner__write-button[disabled] {
+  background: #ddd;
+  color: #ccc;
+}
